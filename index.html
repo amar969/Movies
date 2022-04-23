@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movies</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div class="navbar">
+      <h1>Movies</h1>
+      <div class="search-field">
+        <input type="text" name="" id="movieName" />
+        <button id="search" onclick="MovieData()">Search</button>
+      </div>
+    </div>
+
+    <div id="container"></div>
+    <script>
+      let API_KEY = "81f171f4";
+      let cont = document.getElementById("container");
+      let rating = "";
+      async function MovieData() {
+        try {
+          let moviesearch = document.getElementById("movieName").value;
+          let res = await fetch(
+            `http://www.omdbapi.com/?&apikey=${API_KEY}&s=${moviesearch}&type=movie`
+          );
+          let data = await res.json();
+          console.log(data);
+          console.log(moviesearch);
+          rating = data.Search[0].imdbID;
+          displayData(data);
+        } catch (error) {
+          console.log(error);
+          var errorpage = document.createElement("iframe");
+          errorpage.src = "https://giphy.com/embed/TqiwHbFBaZ4ti";
+          errorpage.style.width = "500px";
+          errorpage.style.height = "500px";
+          cont.append(errorpage);
+        }
+      }
+
+      async function ratingData() {
+        try {
+          let res = await fetch(`http://www.imdb.com/title/${rating}/`);
+          let data = await res.json();
+          console.log(data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      var maindiv = document.createElement("div");
+
+      function displayData(data) {
+        data.Search.forEach((element) => {
+          var c = document.createElement("div");
+          var details = document.createElement("div");
+    
+          var moviePoster = document.createElement("img");
+          moviePoster.src = element.Poster;
+
+          var movieTitle = document.createElement("p");
+          movieTitle.textContent = element.Title;
+            
+          var movieType = document.createElement("h5");
+          movieType.textContent = element.Type;
+
+          var movieYear = document.createElement("h6");
+            movieYear.textContent = element.Year;
+        
+          details.append(movieTitle, movieType, movieYear)  
+          c.append(moviePoster, details );
+          maindiv.append(c);
+          cont.append(maindiv);
+        });
+      }
+
+      function displayError(error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>
