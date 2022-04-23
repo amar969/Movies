@@ -22,9 +22,12 @@
       let API_KEY = "81f171f4";
       let cont = document.getElementById("container");
       let rating = "";
+      
       async function MovieData() {
         try {
+          
           let moviesearch = document.getElementById("movieName").value;
+          
           let res = await fetch(
             `http://www.omdbapi.com/?&apikey=${API_KEY}&s=${moviesearch}&type=movie`
           );
@@ -53,9 +56,11 @@
         }
       }
 
-      var maindiv = document.createElement("div");
 
+      var maindiv = document.createElement("div");
+      
       function displayData(data) {
+        maindiv.innerHTML = "";
         data.Search.forEach((element) => {
           var c = document.createElement("div");
           var details = document.createElement("div");
@@ -77,11 +82,15 @@
           maindiv.append(c);
           cont.append(maindiv);
         });
+
       }
 
       function displayError(error) {
         console.log(error);
       }
+      
+
+      
     </script>
   </body>
 </html>
